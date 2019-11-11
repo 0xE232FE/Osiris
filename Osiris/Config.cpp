@@ -102,6 +102,9 @@ void Config::load(size_t id) noexcept
         if (antiAimJson.isMember("Pitch")) antiAim.pitch = antiAimJson["Pitch"].asBool();
         if (antiAimJson.isMember("Pitch angle")) antiAim.pitchAngle = antiAimJson["Pitch angle"].asFloat();
         if (antiAimJson.isMember("Yaw")) antiAim.yaw = antiAimJson["Yaw"].asBool();
+        if (antiAimJson.isMember("Legit")) antiAim.legit = antiAimJson["Yaw"].asBool();
+		if (antiAimJson.isMember("Right")) antiAim.desyncright = antiAimJson["Right"].asInt();
+		if (antiAimJson.isMember("Left")) antiAim.desyncleft = antiAimJson["Left"].asInt();
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -775,7 +778,13 @@ void Config::load(size_t id) noexcept
         if (miscJson.isMember("Menu key")) misc.menuKey = miscJson["Menu key"].asInt();
         if (miscJson.isMember("Anti AFK kick")) misc.antiAfkKick = miscJson["Anti AFK kick"].asBool();
         if (miscJson.isMember("Auto strafe")) misc.autoStrafe = miscJson["Auto strafe"].asBool();
+	if (miscJson.isMember("Auto strafe style")) misc.autostrafestyle = miscJson["Auto strafe style"].asInt();
+	if (miscJson.isMember("Use spam")) misc.usespam = miscJson["Use spam"].asBool();
+	if (miscJson.isMember("Slowwalk")) misc.slowwalk = miscJson["Slowwalk"].asBool();
+	if (miscJson.isMember("Slowwalk key")) misc.slowwalkkey = miscJson["Slowwalk key"].asBool();
+	if (miscJson.isMember("Slowwalk ammount")) misc.slowwalkammount = miscJson["Slowwalk ammount"].asFloat();
         if (miscJson.isMember("Bunny hop")) misc.bunnyHop = miscJson["Bunny hop"].asBool();
+	if (miscJson.isMember("Block bot")) misc.blockbot = miscJson["Block bot"].asBool();
         if (miscJson.isMember("Custom clan tag")) misc.customClanTag = miscJson["Custom clan tag"].asBool();
         if (miscJson.isMember("Clock tag")) misc.clocktag = miscJson["Clock tag"].asBool();
         if (miscJson.isMember("Clan tag")) strcpy_s(misc.clanTag, sizeof(misc.clanTag), miscJson["Clan tag"].asCString());
@@ -955,6 +964,9 @@ void Config::save(size_t id) const noexcept
         antiAimJson["Pitch"] = antiAim.pitch;
         antiAimJson["Pitch angle"] = antiAim.pitchAngle;
         antiAimJson["Yaw"] = antiAim.yaw;
+	antiAimJson["Legit desync"] = antiAim.legit;
+	antiAimJson["Right"] = antiAim.desyncright;
+	antiAimJson["Left"] = antiAim.desyncleft;
     }
 
     for (size_t i = 0; i < glow.size(); i++) {
@@ -1506,6 +1518,12 @@ void Config::save(size_t id) const noexcept
         miscJson["Menu key"] = misc.menuKey;
         miscJson["Anti AFK kick"] = misc.antiAfkKick;
         miscJson["Auto strafe"] = misc.autoStrafe;
+	miscJson["Auto strafe style"] = misc.autostrafestyle;
+	miscJson["Use spam"] = misc.usespam;
+	miscJson["Block bot"] = misc.blockbot;
+	miscJson["Slowwalk"] = misc.slowwalk;
+	miscJson["Slowwalk key"] = misc.slowwalkkey;
+	miscJson["Slowwalk ammount"] = misc.slowwalkammount;
         miscJson["Bunny hop"] = misc.bunnyHop;
         miscJson["Custom clan tag"] = misc.customClanTag;
         miscJson["Clock tag"] = misc.clocktag;

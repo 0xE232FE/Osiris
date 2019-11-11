@@ -105,9 +105,10 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
 
     if (!cmd->commandNumber)
         return result;
-
+    auto localPlayer = interfaces.entityList->getEntity(interfaces.engine->getLocalPlayer());
     static auto previousViewAngles{ cmd->viewangles };
     const auto currentViewAngles{ cmd->viewangles };
+    static bool switch_ = false;
 
     memory.globalVars->serverTime(cmd);
     Misc::nadePredict();
@@ -121,6 +122,8 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Reportbot::run();
     Misc::bunnyHop(cmd);
     Misc::autoStrafe(cmd);
+    Misc::slowwalk(cmd);
+    Misc::usespam(cmd);
     Misc::removeCrouchCooldown(cmd);
     Aimbot::run(cmd);
     Triggerbot::run(cmd);
@@ -137,9 +140,28 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     Misc::quickHealthshot(cmd);
     Misc::fixTabletSignal();
 
-    if (!(cmd->buttons & (UserCmd::IN_ATTACK | UserCmd::IN_ATTACK2))) {
+    if (!(cmd->buttons & (UserCmd::IN_ATTACK))) {
         Misc::chokePackets(sendPacket);
         AntiAim::run(cmd, previousViewAngles, currentViewAngles, sendPacket);
+		if (config.antiAim.enabled) {
+			if ((localPlayer->flags() & 1) && cmd->sidemove < 3 && cmd->sidemove > -3 && (!(cmd->buttons & (UserCmd::IN_DUCK)))) {
+				if (switch_) {
+					cmd->sidemove = 2;
+				}
+				else {
+					cmd->sidemove = -2;
+				}
+			}
+			if (cmd->buttons & (UserCmd::IN_DUCK) && (localPlayer->flags() & 1) && cmd->sidemove < 4 && cmd->sidemove > -4) {
+				if (switch_) {
+					cmd->sidemove = 3;
+				}
+				else {
+					cmd->sidemove = -3;
+				}
+			}
+			switch_ = !switch_;
+		}
     }
 
     auto viewAnglesDelta{ cmd->viewangles - previousViewAngles };
@@ -150,7 +172,6 @@ static bool __stdcall createMove(float inputSampleTime, UserCmd* cmd) noexcept
     cmd->viewangles = previousViewAngles + viewAnglesDelta;
 
     cmd->viewangles.normalize();
-    Misc::fixMovement(cmd, currentViewAngles.y);
 
     cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
     cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);

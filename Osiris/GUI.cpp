@@ -269,6 +269,13 @@ void GUI::renderAntiAimWindow() noexcept
         ImGui::SameLine();
         ImGui::SliderFloat("Pitch", &config.antiAim.pitchAngle, -89.0f, 89.0f, "%.2f");
         ImGui::Checkbox("Yaw", &config.antiAim.yaw);
+		ImGui::Checkbox("Legit desync", &config.antiAim.legit);
+		ImGui::Text("Right");
+		ImGui::SameLine();
+		hotkey(config.antiAim.desyncright);
+		ImGui::Text("Left");
+		ImGui::SameLine();
+		hotkey(config.antiAim.desyncleft);
         if (!config.style.menuStyle)
             ImGui::End();
     }
@@ -951,8 +958,14 @@ void GUI::renderMiscWindow() noexcept
         hotkey(config.misc.menuKey);
 
         ImGui::Checkbox("Anti AFK kick", &config.misc.antiAfkKick);
+	ImGui::Checkbox("Block bot", &config.misc.blockbot);
         ImGui::Checkbox("Auto strafe", &config.misc.autoStrafe);
+	ImGui::Combo("Auto strafe style", &config.misc.autostrafestyle, "Legit\0Normal\0");
         ImGui::Checkbox("Bunny hop", &config.misc.bunnyHop);
+	ImGui::Checkbox("Use spam", &config.misc.usespam);
+	ImGui::Checkbox("Slowwalk", &config.misc.slowwalk);
+	ImGui::SameLine();
+	hotkey(config.misc.slowwalkkey);
         ImGui::Checkbox("Fast duck", &config.misc.fastDuck);
         ImGui::Checkbox("Moonwalk", &config.misc.moonwalk);
         ImGui::Checkbox("Sniper crosshair", &config.misc.sniperCrosshair);

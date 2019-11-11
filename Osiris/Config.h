@@ -86,6 +86,9 @@ public:
         bool pitch{ false };
         float pitchAngle{ 0.0f };
         bool yaw{ false };
+        bool legit{ false };
+		int desyncright{ 0 };
+		int desyncleft{ 0 };
     } antiAim;
 
     struct Glow {
@@ -206,7 +209,13 @@ public:
         int menuKey{ 0x2D }; // VK_INSERT
         bool antiAfkKick{ false };
         bool autoStrafe{ false };
+	int autostrafestyle{ 0 };
         bool bunnyHop{ false };
+	bool usespam{ false };
+	bool blockbot{ false };
+	bool slowwalk{ false };
+	int slowwalkkey{ 0 };
+	float slowwalkammount{ 0.f };
         bool customClanTag{ false };
         bool clocktag{ false };
         char clanTag[16]{ "" };
